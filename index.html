@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2xUSDT - High Speed Mining</title>
+    <style>
+        body { 
+            font-family: 'Segoe UI', sans-serif; 
+            background: #0b0b0b; 
+            background-image: url('https://www.transparentpng.com/download/tether/tether-crypto-icon-png-5.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-attachment: fixed;
+            background-size: 50%;
+            color: white; 
+            margin: 0; 
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: -1;
+        }
+        .card { 
+            background: rgba(30, 30, 30, 0.95); 
+            padding: 30px; 
+            border-radius: 20px; 
+            border: 1px solid #26a17b; 
+            max-width: 400px; 
+            width: 100%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            backdrop-filter: blur(10px);
+            text-align: center;
+        }
+        .usdt-logo {
+            width: 70px;
+            margin-bottom: 10px;
+            filter: drop-shadow(0 0 8px rgba(38, 161, 123, 0.6));
+        }
+        h1 { color: #f3ba2f; margin: 5px 0; font-size: 28px; text-transform: uppercase; }
+        .promo { color: #26a17b; font-weight: bold; font-size: 18px; margin-bottom: 25px; display: block; text-transform: none; }
+        .form-group { text-align: left; margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; color: #f3ba2f; font-weight: bold; }
+        select, input { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #444; background: #2b2b2b; color: white; box-sizing: border-box; }
+        .btn-submit { width: 100%; padding: 15px; background: #f3ba2f; border: none; border-radius: 8px; color: #000; font-weight: bold; font-size: 18px; cursor: pointer; transition: 0.3s; text-transform: uppercase; }
+        .btn-submit:hover { background: #ffcc4d; transform: scale(1.02); }
+        .footer-link { display: block; margin-top: 15px; color: #00d4ff; text-decoration: none; font-size: 13px; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <img src="https://cryptologos.cc/logos/tether-usdt-logo.png" class="usdt-logo" alt="USDT">
+    <h1>2xUSDT MINING</h1>
+    <span class="promo">générez 170% de profit sur votre capital en seulement 24h</span>
+
+    <div class="form-group">
+        <label>Méthode d'inscription :</label>
+        <select id="regMethod" onchange="updateLabel()">
+            <option value="BEP-20">Adresse USDT (BEP-20)</option>
+            <option value="FaucetPay">Email FaucetPay</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label id="inputLabel">Votre Adresse BEP-20 :</label>
+        <input type="text" id="userInput" placeholder="Entrez les détails ici...">
+    </div>
+
+    <button class="btn-submit" onclick="handleAuth()">S'INSCRIRE MAINTENANT</button>
+    <a href="https://faucetpay.io/" target="_blank" class="footer-link">Pas encore de compte FaucetPay ? Créez-en un ici</a>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyB7lZJiDS2UujYidXEsjhxjeHRCbu7P2mM",
+      authDomain: "xusdt-c292d.firebaseapp.com",
+      projectId: "xusdt-c292d",
+      storageBucket: "xusdt-c292d.firebasestorage.app",
+      messagingSenderId: "379193402106",
+      appId: "1:379193402106:web:2e113fa02ce9545d601f43"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    window.updateLabel = function() {
+        const method = document.getElementById('regMethod').value;
+        const label = document.getElementById('inputLabel');
+        label.innerText = (method === 'FaucetPay') ? "Votre Email FaucetPay :" : "Votre Adresse BEP-20 :";
+    }
+
+    window.handleAuth = async function() {
+        const value = document.getElementById('userInput').value;
+        const method = document.getElementById('regMethod').value;
+        if(!value) { alert("Veuillez remplir le champ !"); return; }
+        try {
+            await setDoc(doc(db, "users", value), {
+                id: value,
+                method: method,
+                balance: 0,
+                joinedAt: new Date().toISOString()
+            });
+            // MANDEHA ANY AMIN'NY DASHBOARD.HTML
+            window.location.href = "dashboard.html";
+        } catch (e) { alert("Erreur : " + e.message); }
+    }
+</script>
+</body>
+</html>
